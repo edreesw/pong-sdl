@@ -9,7 +9,7 @@ Basic pong clone written in C++ using SDL 2 libraries
 # Author : 
 Edrees Wahezi
 
-# Getting it Running: 
+# Project Setup: 
  - Was set up on Visual Studio x64 platform
  - linked to SDL2, SDL2_ttf, and SDL2_image libraries
 
