@@ -46,6 +46,10 @@ int SuperPongBall::currentYDirection() {
 	return yDirection; 
 }
 
+int SuperPongBall::getSpeed() {
+	return speed; 
+}
+
 int SuperPongBall::getX() {
 	return x; 
 }

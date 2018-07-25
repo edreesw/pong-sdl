@@ -21,7 +21,8 @@ public:
 	bool isOutOfBounds(); 
 	bool isPaddleHit(); 
 	int currentXDirection(); 
-	int currentYDirection(); 
+	int currentYDirection();
+	int getSpeed(); 
 	int getX(); 
 	int getY(); 
 	SDL_Surface* getSurface(); 

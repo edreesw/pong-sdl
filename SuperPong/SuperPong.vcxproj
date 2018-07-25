@@ -77,6 +77,10 @@
     <IncludePath>D:\Edrees\Documents\dev\SDL2-2.0.8\include;D:\Edrees\Documents\dev\SDL2_ttf-2.0.14\include;D:\Edrees\Documents\dev\SDL2_image-2.0.3\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Edrees\Documents\dev\SDL2-2.0.8\lib\x86;D:\Edrees\Documents\dev\SDL2_ttf-2.0.14\lib\x86;D:\Edrees\Documents\dev\SDL2_image-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\Edrees\Documents\dev\SuperPong\SDL2-2.0.8\include;D:\Edrees\Documents\dev\SuperPong\SDL2_ttf-2.0.14\include;D:\Edrees\Documents\dev\SuperPong\SDL2_image-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Edrees\Documents\dev\SuperPong\SDL2-2.0.8\lib\x64;D:\Edrees\Documents\dev\SuperPong\SDL2_ttf-2.0.14\lib\x64;D:\Edrees\Documents\dev\SuperPong\SDL2_image-2.0.3\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -127,6 +131,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -134,14 +139,14 @@
     <ClCompile Include="SuperPongBall.cpp" />
     <ClCompile Include="SuperPongConstants.cpp" />
     <ClCompile Include="SuperPongPaddle.cpp" />
-    <ClCompile Include="SuperPongMain.cpp" />
+    <ClCompile Include="SuperPong.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="SuperPongBall.h" />
     <ClInclude Include="SuperPongConstants.h" />
     <ClInclude Include="SuperPongPaddle.h" />
-    <ClInclude Include="SuperPongMain.h" />
+    <ClInclude Include="SuperPong.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

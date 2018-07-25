@@ -5,47 +5,46 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-#include "SuperPongMain.h"
+#include "SuperPong.h"
 #include "SuperPongPaddle.h"
 #include "SuperPongBall.h"
 #include "SuperPongConstants.h"
 #include "HelperFunctions.h"
 using namespace std;
 
-SDL_Window* mainWindow = nullptr;
-SDL_Surface* screenSurface = nullptr;
-TTF_Font* scoreFont = nullptr; 
-//string testImagePath = "images/allMightIntense.jpg";
-
-SuperPongPaddle lPaddle,  rPaddle;
-SuperPongBall ball;
-
-
 
 int main(int argc, char* args[]) {
-	if (!initialize()) {
+	SuperPong superPong;  
+
+	if (!superPong.initialize()) {
 		cout << "Failed to initialize!\n";
 	}
-	else if (!loadImages()) {
+	else if (!superPong.loadImages()) {
 		cout << "Failed to load game images! IMG Error: " << IMG_GetError() << "\n"; 
 
 	}
-	else if (!setupScoreFont()) {
+	else if (!superPong.setupScoreFont()) {
 		cout << "Failed to setup score font! TTF Error: " << TTF_GetError() << "\n"; 
 	} 
 	else { 
-		setupPongImageCoordinates(); 
+		superPong.setupPongImageCoordinates(); 
 
-		pongGameLoop(); 
+		superPong.pongGameLoop(); 
 	}
 	
 	SDL_Delay(3500);
-	close();
+	superPong.close();
 
 	return 0; 
 }
+SuperPong::SuperPong() {
+	mainWindow = nullptr;
+	screenSurface = nullptr;
+	scoreFont = nullptr;
 
-bool initialize() {
+}
+
+bool SuperPong::initialize() {
 	bool success = true;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -68,28 +67,8 @@ bool initialize() {
 	return success; 
 }
 
-SDL_Surface* loadSurface(string path) {
-	SDL_Surface* loadedSurface = nullptr; 
-	SDL_Surface* optimizedSurface = nullptr; 
-	loadedSurface = IMG_Load(path.c_str()); //use png to carry over transparancy w/o having to introduce colorkey handling code
-	if (loadedSurface == nullptr) {
-		cout << "Loading image: " << path.c_str() << " failed! IMG_Error: " << IMG_GetError(); 
-	}
-	else {
-		//optimize image
-		optimizedSurface = SDL_ConvertSurface(loadedSurface, screenSurface->format, 0); 
-		if (optimizedSurface == nullptr) {
-			cout << "Unable to optimize image! SDL Error: " << SDL_GetError();
-		}
 
-		SDL_FreeSurface(loadedSurface); 
-		loadedSurface = nullptr; 
-	}
-
-	return optimizedSurface;
-}
-
-bool loadImages() {
+bool SuperPong::loadImages() {
 	bool success = true;
 	int imgFlags = IMG_INIT_PNG; 
 	if (!(IMG_Init(IMG_INIT_PNG) & imgFlags)) {
@@ -98,9 +77,9 @@ bool loadImages() {
 
 	}
 	else {
-		SDL_Surface* lPaddleSurface = loadSurface(IMG_PATH_L_PADDLE);
-		SDL_Surface* rPaddleSurface = loadSurface(IMG_PATH_R_PADDLE);
-		SDL_Surface* ballSurface = loadSurface(IMG_PATH_BALL);
+		SDL_Surface* lPaddleSurface = loadSurface(IMG_PATH_L_PADDLE, screenSurface);
+		SDL_Surface* rPaddleSurface = loadSurface(IMG_PATH_R_PADDLE, screenSurface);
+		SDL_Surface* ballSurface = loadSurface(IMG_PATH_BALL, screenSurface);
 
 		if (lPaddleSurface == nullptr || lPaddleSurface == nullptr || ballSurface == nullptr) {
 			success = false;
@@ -113,7 +92,7 @@ bool loadImages() {
 	return success; 
 }
 
-bool setupScoreFont() {
+bool SuperPong::setupScoreFont() {
 	bool success = true; 
 	if (TTF_Init() < 0) {
 		cout << "TTF Init failed! TTF Error: " << TTF_GetError(); 
@@ -130,7 +109,7 @@ bool setupScoreFont() {
 	return success; 
 }
 
-void setupPongImageCoordinates() {
+void SuperPong::setupPongImageCoordinates() {
 	lPaddle.setCoordinates(0, randomNumBetween(0, SCREEN_HEIGHT - lPaddle.getSurface()->h)); 
 
 	rPaddle.setCoordinates(SCREEN_WIDTH - rPaddle.getSurface()->w, randomNumBetween(0, SCREEN_HEIGHT - rPaddle.getSurface()->h)); 
@@ -138,7 +117,7 @@ void setupPongImageCoordinates() {
 	ball.reset(); 
 }
 
-void pongGameLoop() {
+void SuperPong::pongGameLoop() {
 	bool quit = false; 
 	SDL_Event event; 
 
@@ -177,7 +156,7 @@ void pongGameLoop() {
 	}
 }
 
-bool handleKeyboardState(const Uint8* keystate) {
+bool SuperPong::handleKeyboardState(const Uint8* keystate) {
 	bool quit_key = false; 
 	
 	if (keystate[QUIT_GAME_KEY]) {
@@ -205,7 +184,7 @@ bool handleKeyboardState(const Uint8* keystate) {
 	return quit_key; 
 }
 
-void updateScreen() {
+void SuperPong::updateScreen() {
 	//clear screen
 	SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0, 0, 0)); 
 
@@ -217,20 +196,13 @@ void updateScreen() {
 	SDL_UpdateWindowSurface(mainWindow); 
 }
 
-int blitSurfaceWithOffset(SDL_Surface* srcSurface, SDL_Surface* screenSurface, Sint16 x, Sint16 y) {
-	SDL_Rect offset;
-	offset.x = x;
-	offset.y = y;
 
-	return SDL_BlitSurface(srcSurface, nullptr, screenSurface, &offset);
-}
-
-void drawScores(int leftScore, int rightScore) {
+void SuperPong::drawScores(int leftScore, int rightScore) {
 	string leftScoreText = to_string(leftScore); 
 	string rightScoreText = to_string(rightScore); 
 
-	SDL_Surface* leftScoreSurface = renderText(leftScoreText);
-	SDL_Surface* rightScoreSurface = renderText(rightScoreText); 
+	SDL_Surface* leftScoreSurface = renderText(leftScoreText, scoreFont);
+	SDL_Surface* rightScoreSurface = renderText(rightScoreText, scoreFont); 
 
 	blitSurfaceWithOffset(leftScoreSurface, screenSurface, (SCREEN_WIDTH / 2) / 2 - leftScoreSurface->w / 2, 0); 
 	blitSurfaceWithOffset(rightScoreSurface, screenSurface, ((SCREEN_WIDTH / 2) / 2) + (SCREEN_WIDTH / 2) - (rightScoreSurface->w / 2), 0); 
@@ -241,15 +213,8 @@ void drawScores(int leftScore, int rightScore) {
 	rightScoreSurface = nullptr; 
 }
 
-SDL_Surface* renderText(string text) {
-	SDL_Color color; 
-	color.r = 204;
-	color.g = 255;
-	color.b = 255;
-	return TTF_RenderText_Solid(scoreFont, text.c_str(), color); 
-}
 
-void handleBallCollision() {
+void SuperPong::handleBallCollision() {
 	if (ball.isPaddleHit()) {
 		ball.changeToOppositeXDirection(); 
 		//TODO: add an up to date "movement" state to paddle, that shows if its moving up, down, or idle during the current loop. let this affect the direction (y axis) the ball bounces
@@ -270,15 +235,10 @@ void handleBallCollision() {
 	}
 }
 
-void capFPS(Uint32 startTicks, Uint32 endTicks) {
-	int delay = (1000 / FRAME_PER_SECOND) - (endTicks - startTicks); 
 
-	if (delay > 0) {
-		SDL_Delay(delay); 
-	}
-}
 
-void close() {
+
+void SuperPong::close() {
 	//deallocate memory to window
 	SDL_DestroyWindow(mainWindow); 
 	mainWindow = nullptr;

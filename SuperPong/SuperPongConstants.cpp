@@ -1,4 +1,5 @@
 #include "SuperPongConstants.h"
+#include <SDL.h>
 #include <string>
 
 const int SCREEN_WIDTH = 640;

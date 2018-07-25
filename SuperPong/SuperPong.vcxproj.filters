@@ -21,13 +21,13 @@
     <ClCompile Include="SuperPongPaddle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SuperPongMain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SuperPongConstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HelperFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SuperPong.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,10 +41,10 @@
     <ClInclude Include="SuperPongConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SuperPongMain.h">
+    <ClInclude Include="HelperFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HelperFunctions.h">
+    <ClInclude Include="SuperPong.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
