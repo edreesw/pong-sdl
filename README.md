@@ -15,6 +15,6 @@ Launch the game by running the SuperPong.exe file
 Written in C++ using SDL 2 libraries
 
 # Project Setup: 
- - Was set up on Visual Studio x64 platform
+ - Was initially set up on Visual Studio x64 platform, currently working on a partial rewrite. 
  - linked to SDL2, SDL2_ttf, and SDL2_image libraries
 
